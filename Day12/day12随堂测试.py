@@ -13,37 +13,37 @@
 #for i in range
 
 #写法1
-# flag = False
-# for i in range(10):		#第一层
-# 	print("------i",i)
-# 	if i > 5:
-# 		for j in range(10):		#第二层
-# 			print("======j",j)
-# 			if j > 5:
-# 				for k in range(10):		#第三层
-# 					if k == 5:
-# 						print("k", k)
-# 						flag = True
-# 				if flag is True:
-# 					break
-# 		if flag is True:
-# 			break
-# 	if flag is True:
-# 		break
+flag = False
+for i in range(10):		#第一层
+	print("------i",i)
+	if i > 5:
+		for j in range(10):		#第二层
+			print("======j",j)
+			if j > 5:
+				for k in range(10):		#第三层
+					if k == 5:
+						print("k", k)
+						flag = True
+				if flag is True:
+					break
+		if flag is True:
+			break
+	if flag is True:
+		break
 
 #写法2
-# def work():
-# 	for i in range(10):  # 第一层
-# 		print("------i", i)
-# 		if i > 5:
-# 			for j in range(10):  # 第二层
-# 				print("======j", j)
-# 				if j > 5:
-# 					for k in range(10):  # 第三层
-# 						if k == 5:
-# 							print("k", k)
-# 							return i,j,k
-# print(work())
+def work():
+	for i in range(10):  # 第一层
+		print("------i", i)
+		if i > 5:
+			for j in range(10):  # 第二层
+				print("======j", j)
+				if j > 5:
+					for k in range(10):  # 第三层
+						if k == 5:
+							print("k", k)
+							return i,j,k
+print(work())
 
 #写法3
 break_flag = True

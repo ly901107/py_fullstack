@@ -16,43 +16,43 @@
 
 #----------1、使用while循环输入 1 2 3 4 5 6     8 9 10
 
-# count = 0
-# while count<10:
-# 	number = input('>>>').strip()
-# 	print(number)
-# 	count += 1
+count = 0
+while count<10:
+	number = input('>>>').strip()
+	print(number)
+	count += 1
 
 #----------2、求1-100的所有数的和
-#
-# sum = 0
-# for i in range(101):
-# 	sum += i
-# print(sum)
+
+sum = 0
+for i in range(101):
+	sum += i
+print(sum)
 
 #----------2、求1-100的所有数的和 优化
 
-# print(sum(range(1,101)))
+print(sum(range(1,101)))
 
 #----------3、输出 1-100 内的所有奇数
 
-# for i in range(101):
-# 	if i % 2 != 0:		#取余 判断是否为奇数数
-# 		print(i)
+for i in range(101):
+	if i % 2 != 0:		#取余 判断是否为奇数数
+		print(i)
 
 #----------4、输出 1-100 内的所有偶数
 
-# for i in range(101):
-# 	if i % 2 == 0:		#取余 判断是否为偶数
-# 		print(i)
+for i in range(101):
+	if i % 2 == 0:		#取余 判断是否为偶数
+		print(i)
 
 #----------5、求1-2+3-4+5 ... 99的所有数的和
 
-# sum = 0
-# for i in range(1,100):
-# 	if i % 2 == 0:
-# 		i = -i
-# 	sum += i
-# print(sum)
+sum = 0
+for i in range(1,100):
+	if i % 2 == 0:
+		i = -i
+	sum += i
+print(sum)
 
 #---------6、模拟登陆
 #     		1. 用户输入帐号密码进行登陆

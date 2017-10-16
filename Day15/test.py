@@ -6,5 +6,5 @@
 d = {1: "yuan", "name": "alex"}
 
 for key,value in d.items():
-	# print("{key}----->{value}".format(key=key, value = value))
+	print("{key}----->{value}".format(key=key, value = value))
 	print(str(key)+"---->"+ str(value))
