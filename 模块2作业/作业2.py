@@ -35,9 +35,4 @@ while True:
 		last_layers = []
 	if choice == 'q':		#退出
 		break
-#666666
-	print("6666")
-
-
-	666
 
