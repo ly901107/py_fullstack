@@ -18,6 +18,7 @@
 flag_login = False
 flag_regular = False
 import sys
+import  os
 
 while True:
 	username = input('Please input your username: ').strip()		#输入账号密码
@@ -33,7 +34,7 @@ while True:
 			f_username,f_passwd,balance = line.strip().split()
 			if username == f_username and passwd == f_passwd:		#账号密码正确
 				print('登陆成功,账户余额为%s'%balance)		#登陆并打印余额
-				balance = int(balance)
+				cash = int(balance)
 				flag_login = True
 				break
 		if not flag_login:		#账户密码错误
@@ -58,7 +59,7 @@ while True:
 			print(num, key)
 			num += 1
 
-		choice = input('请输入商品编号或者按q退出: ').strip()		#输入商品编号
+		choice = input("请输入商品编号或'q'退出: ").strip()		#输入商品编号
 		quantity = input('请输入要购买的数量: ').strip()		#输入购买数量
 		if choice == 'q':
 			print('==========打印购物车并退出')
@@ -70,12 +71,33 @@ while True:
 				product_name = product[0]				#商品名为		product[0]
 				product_price = product[1]				#商品价格为		product[1]
 				cost = product_price * quantity			#单次购买花费为	cost
-				if cost <= balance:		#判断是否买得起
+				if cost <= cash:		#判断是否买得起
 					print('购买成功')
 					sys.exit()
 				else:
-					print('账户余额不足，还差%s元'%(cost - balance))
-					continue
+					print('账户余额不足，还差%s元'%(cost - cash))
+					recharge = input('余额不足，是否进行充值 y/n: ').strip()		#询问是否充值
+					if recharge == 'y':
+						money = input('输入充值金额: ').strip()		#输入充值金额
+						if money.isdigit():
+							money = int(money)
+							cash += money		#进行充值
+							with open('shopping_user','r',encoding='utf8') as f_user_read,\
+								open('shopping_user_recharge',mode='w',encoding='utf8') as f_user_write:
+								for line in f_user_read:
+									if username in line:
+										line = ' '.join([username,passwd,str(cash)+'\n'])
+									f_user_write.write(line)
+							if os.path.isfile('shopping_user_bak'):		#判断备份文件是否存在
+								os.remove('shopping_user_bak')
+							os.rename('shopping_user','shopping_user_bak')
+							os.rename('shopping_user_recharge','shopping_user')
+							print('充值成功,余额为%s'%cash)
+					elif recharge == 'n':
+						continue
+					else:
+						print('输入错误，退出充值')
+						continue
 			else:
 				print('输入错误，请重新输入！')
 				continue
