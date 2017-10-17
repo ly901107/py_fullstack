@@ -15,22 +15,21 @@
 # 		 将用户此次购物信息存入到历史购物文件shopping_history
 #     9. 商品列表分级显示			for循环打印
 
-flag_login = False
-flag_regular = False
+flag_login = False		#判断是否登陆
+flag_regular = False		#判断是否是老用户
 import sys
-import  os
+import os
 
 while True:
-	username = input('Please input your username: ').strip()		#输入账号密码
+	username = input('Please input your username: ').strip()		#输入账号
 	with open('shopping_regular','r',encoding='utf8') as f_regular:		#判断账户是否曾经购买过商品
 		for line in f_regular:
-			if username in line.strip():
-				flag_regular = 	True		#购买过flag_regular为True
+			if username in line.strip():		#判断是否为老用户
+				flag_regular = True
 				break
-
-	passwd = input('Please input your passwd: ').strip()
+	passwd = input('Please input your passwd: ').strip()		#输入密码
 	with open('shopping_user','r',encoding='utf8') as f_user:
-		for line in f_user:
+		for line in f_user:		#验证账号密码
 			f_username,f_passwd,balance = line.strip().split()
 			if username == f_username and passwd == f_passwd:		#账号密码正确
 				print('登陆成功,账户余额为%s'%balance)		#登陆并打印余额
@@ -40,20 +39,29 @@ while True:
 		if not flag_login:		#账户密码错误
 			print('账号密码输入错误，请重新输入！')
 			continue
-
 	if flag_regular:		#判断为老顾客并打印购物记录
-		print('=================老顾客')
-
+		print('以前购买商品如下'.center(25, '-'))
+		print('名称          数量          单价')
+		with open('shopping_history','r',encoding='utf8') as f_history:
+			for line in f_history:
+				if username in line.strip():
+					f_history_str = str(line)
+					f_history_dict = eval(f_history_str)
+					for key,values in f_history_dict[username].items():		#遍历购物记录并打印
+						print('%s%10s%10s'%(key,values[0],values[1]))
+		print('End'.center(25, '-'))
+	total_cost = 0		#购物总花费
 	shopping_cart = {}		#购物车
+	shopping_cart_history = {}		#购物车历史信息
 	shopping_list = [
 		["iphone7", 5800],
 		["臭豆腐", 100],
 		["甜不辣", 20],
 		["拖鞋", 50],
 		["coffee", 200]
-	]
-	while True:
-		num = 1
+	]		#购物清单
+	while True:		#购物循环
+		num = 1		#商品序号
 		print('商品信息'.center(20, '-'))
 		for key in shopping_list:		#打印出商品列表
 			print(num, key)
@@ -63,12 +71,21 @@ while True:
 			print('购买商品如下'.center(25,'-'))
 			print('ID   名称          数量          单价')
 			id_num = 1
-			for key in shopping_cart:
+			for key in shopping_cart:		#打印出购物信息
 				msg = ("%d%10s%10s%15s"%
 					   (id_num, key, shopping_cart[key][0],shopping_cart[key][1]))
-				print(msg)		#打印出购物信息
+				print(msg)
 				id_num += 1
-
+				total_cost += int(shopping_cart[key][0]) * int(shopping_cart[key][1])		#打印总花费及余额
+			if shopping_cart:		#购物车不为空，存储历史购物信息
+				shopping_cart_history[username] = shopping_cart
+				with open('shopping_history', 'w', encoding='utf8') as f_history_write:		#记录历史购物信息
+						f_history_write.write(str(shopping_cart_history)+'\n')
+			if not flag_regular:  # 不是老顾客，记录为老顾客
+				with open('shopping_regular','a+',encoding='utf8') as f_regular_write:		#记录老顾客信息
+					f_regular_write.write(username+'\n')
+			print('共计消费%d元，余额为%s'%(total_cost,cash))
+			print('End'.center(25,'-'))
 			sys.exit()
 		quantity = input('请输入要购买的数量: ').strip()  # 输入购买数量
 		if choice.isdigit() and quantity.isdigit():		#编号和数量是否只由数字组成
@@ -107,7 +124,7 @@ while True:
 			print('输入错误，请重新输入！')
 			continue
 
-		with open('shopping_user', 'r', encoding='utf8') as f_user_read, \
+		with open('shopping_user', 'r', encoding='utf8') as f_user_read,\
 				open('shopping_user_recharge', mode='w', encoding='utf8') as f_user_write:	#实时保存账户余额
 			for line in f_user_read:
 				if username in line:

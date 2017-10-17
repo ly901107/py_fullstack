@@ -17,7 +17,7 @@ with open('menu',encoding='utf8') as f_menu:
 	f_read_str = str(f_read)		#转换成字符串
 current_layer = eval(f_read_str)		#转换成字典
 
-
+print(current_layer)
 while True:
 	for key in current_layer:
 		print(key)
@@ -35,4 +35,3 @@ while True:
 		last_layers = []
 	if choice == 'q':		#退出
 		break
-
