@@ -58,22 +58,34 @@ while True:
 		for key in shopping_list:		#打印出商品列表
 			print(num, key)
 			num += 1
-
 		choice = input("请输入商品编号或'q'退出: ").strip()		#输入商品编号
-		quantity = input('请输入要购买的数量: ').strip()		#输入购买数量
-		if choice == 'q':
-			print('==========打印购物车并退出')
-		if choice.isdigit() and quantity.isdigit():		#字符串是否只由数字组成
+		if choice == 'q':		#输入为q
+			print('购买商品如下'.center(25,'-'))
+			print('ID   名称          数量          单价')
+			id_num = 1
+			for key in shopping_cart:
+				msg = ("%d%10s%10s%15s"%
+					   (id_num, key, shopping_cart[key][0],shopping_cart[key][1]))
+				print(msg)		#打印出购物信息
+				id_num += 1
+
+			sys.exit()
+		quantity = input('请输入要购买的数量: ').strip()  # 输入购买数量
+		if choice.isdigit() and quantity.isdigit():		#编号和数量是否只由数字组成
 			choice = int(choice)
 			quantity = int(quantity)
-			if choice >0 and choice < len(shopping_list):		#编号是否在范围内
-				product = shopping_list[choice-1]		#商品列表为		product
-				product_name = product[0]				#商品名为		product[0]
-				product_price = product[1]				#商品价格为		product[1]
+			if choice >0 and choice <= len(shopping_list):		#编号是否在范围内
+				product = shopping_list[choice - 1]  # 商品列表为		product
+				product_name = product[0]  # 商品名为		product[0]
+				product_price = product[1]  # 商品价格为		product[1]
 				cost = product_price * quantity			#单次购买花费为	cost
 				if cost <= cash:		#判断是否买得起
-					print('购买成功')
-					sys.exit()
+					cash -= cost		#购买扣钱
+					print('已购买商品%s，花费金额%s,账户余额为%s'%(product_name,cost,cash))
+					if product_name in shopping_cart:		#商品名已存在购物车
+						shopping_cart[product_name][0] += quantity
+					else:		#商品第一次购买
+						shopping_cart[product_name] = [quantity, product_price]		#将购买信息加入购物车
 				else:
 					print('账户余额不足，还差%s元'%(cost - cash))
 					recharge = input('余额不足，是否进行充值 y/n: ').strip()		#询问是否充值
@@ -82,16 +94,6 @@ while True:
 						if money.isdigit():
 							money = int(money)
 							cash += money		#进行充值
-							with open('shopping_user','r',encoding='utf8') as f_user_read,\
-								open('shopping_user_recharge',mode='w',encoding='utf8') as f_user_write:
-								for line in f_user_read:
-									if username in line:
-										line = ' '.join([username,passwd,str(cash)+'\n'])
-									f_user_write.write(line)
-							if os.path.isfile('shopping_user_bak'):		#判断备份文件是否存在
-								os.remove('shopping_user_bak')
-							os.rename('shopping_user','shopping_user_bak')
-							os.rename('shopping_user_recharge','shopping_user')
 							print('充值成功,余额为%s'%cash)
 					elif recharge == 'n':
 						continue
@@ -104,3 +106,14 @@ while True:
 		else:
 			print('输入错误，请重新输入！')
 			continue
+
+		with open('shopping_user', 'r', encoding='utf8') as f_user_read, \
+				open('shopping_user_recharge', mode='w', encoding='utf8') as f_user_write:	#实时保存账户余额
+			for line in f_user_read:
+				if username in line:
+					line = ' '.join([username, passwd, str(cash) + '\n'])
+				f_user_write.write(line)
+		if os.path.isfile('shopping_user_bak'):  # 判断备份文件是否存在
+			os.remove('shopping_user_bak')
+		os.rename('shopping_user', 'shopping_user_bak')
+		os.rename('shopping_user_recharge', 'shopping_user')
