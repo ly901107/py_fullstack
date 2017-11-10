@@ -91,7 +91,7 @@ while True:
 		if choice.isdigit() and quantity.isdigit():		#编号和数量是否只由数字组成
 			choice = int(choice)
 			quantity = int(quantity)
-			if choice >0 and choice <= len(shopping_list):		#编号是否在范围内
+			if choice >0 and choice <= len(shopping_list) + 1:		#编号是否在范围内
 				product = shopping_list[choice - 1]  # 商品列表为		product
 				product_name = product[0]  # 商品名为		product[0]
 				product_price = product[1]  # 商品价格为		product[1]

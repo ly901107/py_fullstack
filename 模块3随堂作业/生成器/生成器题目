@@ -1,0 +1,4 @@
+1、自定义函数模拟range(1,7,2)
+2、模拟管道，实现功能:tail -f access.log | grep '404'
+3、编写装饰器，实现初始化协程函数的功能
+4、实现功能：grep  -rl  'python'  /etc
