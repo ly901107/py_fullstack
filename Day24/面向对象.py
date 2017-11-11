@@ -4,8 +4,8 @@
 # Date: 2017/10/31
 
 class Garen:
-	camp = 'Demacia'
-	def attack(self):
-		print('attack')
+    camp = 'Demacia'
+    def attack(self):
+        print('attack')
 
 print(Garen)	#<class '__main__.Garen'>
