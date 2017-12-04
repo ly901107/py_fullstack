@@ -66,34 +66,34 @@ flag_count = True
 flag_login = False
 
 while flag_count:
-	username = input('please input your username: ').strip()		#输入用户名
-	with open('lock_user','r', encoding='utf8') as f_lock:
-		for line in f_lock:
-			if username == line.strip():		#判断用户名是否被锁定
-				sys.exit('%s 已经被锁定'%username)		#退出主程序并打印
+    username = input('please input your username: ').strip()		#输入用户名
+    with open('lock_user','r', encoding='utf8') as f_lock:
+        for line in f_lock:
+            if username == line.strip():		#判断用户名是否被锁定
+                sys.exit('%s 已经被锁定'%username)		#退出主程序并打印
 
-	count = passwd_wrong.count(username)  # 判断用户名输入次数
+    count = passwd_wrong.count(username)  # 判断用户名输入次数
 
-	if count < 3:  # 判断此用户名是否已登陆3次
-		passwd = input('please input your passwd: ').strip()		#输入密码
-		with open('user_passwd','r',encoding='utf8') as f_user:
-			for line in f_user:
-				f_username,f_passwd = line.strip().split()		#遍历出的用户名密码进行赋值操作
-				if username == f_username and passwd == f_passwd:		#判断输入的用户名密码是否存在
-					flag_login = True
-					print('登陆成功')
-					break
-			if flag_login:		#判断是否登陆成功
-				break
-			else:			#登陆失败
-				passwd_wrong.append(username)		#将登陆失败用户名加入列表中
-				count = passwd_wrong.count(username)		#计算此从户名登陆次数
-				print('密码错误，还剩下%s次机会'%(3-count))
-				if count == 3:
-					flag_count = False
-	else:
-		flag_count = False
+    if count < 3:  # 判断此用户名是否已登陆3次
+        passwd = input('please input your passwd: ').strip()		#输入密码
+        with open('user_passwd','r',encoding='utf8') as f_user:
+            for line in f_user:
+                f_username,f_passwd = line.strip().split()		#遍历出的用户名密码进行赋值操作
+                if username == f_username and passwd == f_passwd:		#判断输入的用户名密码是否存在
+                    flag_login = True
+                    print('登陆成功')
+                    break
+            if flag_login:		#判断是否登陆成功
+                break
+            else:			#登陆失败
+                passwd_wrong.append(username)		#将登陆失败用户名加入列表中
+                count = passwd_wrong.count(username)		#计算此从户名登陆次数
+                print('密码错误，还剩下%s次机会'%(3-count))
+                if count == 3:
+                    flag_count = False
+    else:
+        flag_count = False
 else:
-	with open('lock_user','a+',encoding='utf8') as f_lock:
-		f_lock.write(username+'\n')
-		print('用户名%s输入次数过多，已被锁定'%username)
+    with open('lock_user','a+',encoding='utf8') as f_lock:
+        f_lock.write(username+'\n')
+        print('用户名%s输入次数过多，已被锁定'%username)
