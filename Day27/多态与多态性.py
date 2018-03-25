@@ -32,19 +32,20 @@
 # fun(peo1)
 # fun(pig1)
 
-# class A:
-#     __x =1      #_A__x = 1
-#     def __test(self):
-#         print('from A')
-#
-#
-# a = A()
-#
+class A:
+    __x =1      #_A__x = 1
+    def __test(self):
+        print('from A')
+        print(self)
+
+
+a = A()
+
 # print(A.__dict__)       #_A__x': 1
 # print(A._A__x)          #1
 # print(a._A__x)          #1
-#
-# A._A__test(A)           #from A
+
+A._A__test(A)           #from A
 # a._A__test()            #from A
 
 
@@ -89,17 +90,17 @@
 # b.test()        #from A
 
 
-class Student(object):
-
-    def __init__(self, name, score):
-        self.__name = name
-        self.__score = score
-    def get_name(self):
-        return self.__name
-
-bart = Student('Bart Simpson', 98)
-print(bart.get_name())
-bart.__name = 'New Name'
-print(bart.get_name())
-print(bart.__name)
-print(bart.__dict__)
+# class Student(object):
+#
+#     def __init__(self, name, score):
+#         self.__name = name
+#         self.__score = score
+#     def get_name(self):
+#         return self.__name
+#
+# bart = Student('Bart Simpson', 98)
+# print(bart.get_name())
+# bart.__name = 'New Name'
+# print(bart.get_name())
+# print(bart.__name)
+# print(bart.__dict__)

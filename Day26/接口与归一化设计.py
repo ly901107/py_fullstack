@@ -25,20 +25,20 @@
 
 import abc
 
-# class Animal(metaclass=abc.ABCMeta):
-#     @abc.abstractmethod
-#     def run(self):
-#         pass
-#     @abc.abstractmethod
-#     def speak(self):
-#         pass
-#
-# class People(Animal):
-#     # def run(self):
-#     #     pass
-#     #
-#     # def speak(self):
-#     #     pass
-#     pass
-#
-# Peo1 = People()     #TypeError: Can't instantiate abstract class People with abstract methods run, speak
+class Animal(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def run(self):
+        pass
+    @abc.abstractmethod
+    def speak(self):
+        pass
+
+class People(Animal):
+    def run(self):
+        pass
+
+    def speak(self):
+        pass
+    pass
+
+Peo1 = People()     #TypeError: Can't instantiate abstract class People with abstract methods run, speak

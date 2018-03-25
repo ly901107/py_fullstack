@@ -56,21 +56,21 @@
 # print(e1)           #<year:2017,mont:11,day:19>
                     #<__main__.EuroDate object at 0x00000000021FB320>
 
-# class FOO:
-#     def bar(self):
-#         pass
-#
-#     @classmethod    #把一个方法绑定给类：类.绑定到类的方法(),会把类本身当做第一个参数自动传给绑定到类的方法
-#     def test(cls,x):
-#         print(cls,x)    #拿掉一个类的内存地址后，就可以实例化或者引用类的属性了
-#
-# f = FOO()
-# print(f.bar)        #<bound method FOO.bar of <__main__.FOO object at 0x000000000269B208>>    对象的绑定方法
-# print(f.test)       #<bound method FOO.test of <class '__main__.FOO'>>                        类的绑定方法
-# print(FOO.test)     #<bound method FOO.test of <class '__main__.FOO'>>                        类的绑定方法
-#
-# f.test(111)         #<class '__main__.FOO'> 111，实例可以调用，但是传入的是实例对应的类
-# FOO.test(111)       #<class '__main__.FOO'> 111
+class FOO:
+    def bar(self):
+        pass
+
+    @classmethod    #把一个方法绑定给类：类.绑定到类的方法(),会把类本身当做第一个参数自动传给绑定到类的方法
+    def test(cls,x):
+        print(cls,x)    #拿掉一个类的内存地址后，就可以实例化或者引用类的属性了
+
+f = FOO()
+print(f.bar)        #<bound method FOO.bar of <__main__.FOO object at 0x000000000269B208>>    对象的绑定方法
+print(f.test)       #<bound method FOO.test of <class '__main__.FOO'>>                        类的绑定方法
+print(FOO.test)     #<bound method FOO.test of <class '__main__.FOO'>>                        类的绑定方法
+
+f.test(111)         #<class '__main__.FOO'> 111，实例可以调用，但是传入的是实例对应的类
+FOO.test(111)       #<class '__main__.FOO'> 111
 
 
 class MySQL:

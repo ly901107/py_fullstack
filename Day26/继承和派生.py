@@ -3,7 +3,7 @@
 # __author__ = "Lex"
 # Date: 2017/11/12
 
-#每次实例化一次，计数加1
+# 每次实例化一次，计数加1
 # class Garen:
 #     camp = 'Demacia'
 #     n = 0
@@ -18,9 +18,17 @@
 #
 #
 # g1 = Garen('lex')
-# g2 = Garen('lex')
+# print(g1.__dict__)
 #
 # print(g1.n)     #1
+#
+# g2 = Garen('lex')
+# print(g2.__dict__)
+#
+# print(g2.n)
+# g2.n = 10
+# print(Garen.n)
+# print(g2.n)
 
 #可变和不可变类型的修改
 
@@ -34,12 +42,14 @@
 #
 #     def attack(self,enemy):                #普通攻击技能，enemy是敌人
 #         enemy.life_value -= self.aggressivity  #根据自己攻击力，减少敌人的血量
-#
-#
+
+
 # g1 = Garen('lex')
 # g2 = Garen('alex')
 #
+# print(g1.__dict__)
 # g1.camp = '6666'    #如果为不可变类型，修改的是对象自己的名称空间的
+# print(g1.__dict__)
 # print(g1.camp)      #6666
 # print(g2.camp)      #Demacia
 #
@@ -66,18 +76,18 @@
 # print(SubClass2.__bases__)        #(<class '__main__.ParentClass1'>, <class '__main__.ParentClass2'>)
 
 
-class Aniaml:
-    def __init__(self,name,age):
-        self.name = name
-        self.age = age
-
-    def walk(self):
-        print('%s is wakling'% self.name)
-    def say(self):
-        print('%s is saying'% self.name)
-
-class People(Aniaml):
-    pass
+# class Aniaml:
+#     def __init__(self,name,age):
+#         self.name = name
+#         self.age = age
+#
+#     def walk(self):
+#         print('%s is wakling'% self.name)
+#     def say(self):
+#         print('%s is saying'% self.name)
+#
+# class People(Aniaml):
+#     pass
 
 # p1 = People('lex',18)
 # p1.walk()
@@ -115,5 +125,33 @@ class People(Aniaml):
 # s1 = Student('lex','male',python_obj)
 # print(t1.course)        #<__main__.Course object at 0x00000000027BE710>
 # print(s1.course.name)   #python
+#
+# class Foo1:
+#     def foo1(self):
+#         print(self)
+#
+#
+# class Foo2(Foo1):
+#     def foo1(self):
+#         Foo1.foo1(self)
+#         print(self)
+#
+# foo=Foo2()
+# foo.foo1()
 
 
+class Foo:
+    def f1(self):
+        print('Foo.f1')
+
+    def f2(self):
+        print('Foo.f2')
+        self.f1()
+
+class Bar(Foo):
+    def f1(self):
+        print('Bar.f1')
+
+
+b=Bar()
+b.f2()

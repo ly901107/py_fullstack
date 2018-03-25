@@ -58,6 +58,7 @@ class Course:       #将课程归类
         self.price = price
         self.period = period
 
+
 s1 = Student('12345','lex','female')
 
 python_obj = Course('python',15800,'7m')

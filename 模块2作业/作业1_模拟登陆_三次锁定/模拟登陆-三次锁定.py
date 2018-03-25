@@ -28,7 +28,6 @@ sum = 0
 for i in range(101):
 	sum += i
 print(sum)
-
 #----------2、求1-100的所有数的和 优化
 
 print(sum(range(1,101)))

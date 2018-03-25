@@ -3,14 +3,22 @@
 # __author__ = "Lex"
 # Date: 2017/11/23
 
-# import hashlib
+import hashlib
+# #
+# # m = hashlib.md5()
+# # m.update('alex'.encode('utf-8'))
+# # print(m.hexdigest())
 #
-# m = hashlib.md5()
-# m.update('alex'.encode('utf-8'))
-# print(m.hexdigest())
+# print('%s%%' %(100))
+#
+# print('[%-2s]' %'#')
+# print('[%15s]' %'#')
+# print(('[%%-%ds]' %50) %'#')
 
-print('%s%%' %(100))
+md5 = hashlib.md5()
+md5.update('how to use md5 in '.encode('utf8'))
+md5.update('python hashlib?'.encode('utf8'))
+print(md5.hexdigest())
 
-print('[%-2s]' %'#')
-print('[%15s]' %'#')
-print(('[%%-%ds]' %50) %'#')
+md5.update('how to use md5 in python hashlib?'.encode('utf8'))
+print(md5.hexdigest())

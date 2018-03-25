@@ -79,8 +79,5 @@
 # print('Done')
 
 
-def foo(x, y=3):
-    print(x)
-    print(y)
-
-foo()
+num = int(0.1)
+print(num)
