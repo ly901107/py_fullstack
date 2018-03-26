@@ -18,6 +18,6 @@ def authenticate(username, passwd, conn):
     if username in config.sections():
         passwd_bak = config[username]['Passwd']
         if passwd == passwd_bak:
-            print('通过验证====', username)
+            # print('通过验证====', username)
             config[username]['Username'] = username
             return config[username]

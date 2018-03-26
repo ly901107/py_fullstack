@@ -157,6 +157,10 @@ class FtpClient(object):
         self.sock.send(json.dumps(data_header).encode())        #发送报头
         response = get_response(self.sock)                      #等待回复
         print('response', response)
+        #TODO 增加对用户进行磁盘配额、不同用户配额可不同
+        if response['status_code'] == 262:
+            print('"上传文件已超最大磁盘容量"')
+            return
 
         if response['status_code'] == 261:
 

@@ -19,6 +19,7 @@ STATUS_CODE  = {
     259:"在服务器上不存在路径",
     260:"路径改变",
     261:"准备好接收文件",
+    262: "上传文件已超最大磁盘容量"
 }
 
 def send_response(conn, status_code, data=None):

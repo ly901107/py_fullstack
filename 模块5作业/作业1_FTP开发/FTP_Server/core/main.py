@@ -3,7 +3,7 @@
 # __author__ = "Lex"
 # Date: 2017/12/28
 
-import socketserver,json,subprocess,re,os,hashlib
+import socketserver,json,subprocess,re,os,hashlib,configparser
 from core.db_handler import send_response
 from core.auth import authenticate
 from conf import settings
@@ -22,6 +22,7 @@ STATUS_CODE  = {
     259:"在服务器上不存在路径",
     260:"路径改变",
     261:"准备好接收文件",
+    262:"上传文件已超最大磁盘容量"
 }
 
 ip_port=('127.0.0.1',9000)
@@ -52,10 +53,12 @@ class FtpServer(socketserver.BaseRequestHandler):
         :param kwargs:
         :return:
         '''
-        print('from server_auth')
+        # print('from server_auth')
         data = args[0]
+
         if data.get('username') is None or data.get('passwd') is None:
             send_response(self.request, 252)
+
         user = authenticate(data.get('username'), data.get('passwd'), self.request)
         if user is None:
             send_response(self.request, 253)
@@ -67,6 +70,7 @@ class FtpServer(socketserver.BaseRequestHandler):
 
             self.home_dir = '%s/%s' % (settings.HOME_DIR, data.get('username'))
             self.current_dir = self.home_dir
+            self.username = user
             send_response(self.request, 254)
 
     def run_cmd(self, cmd):
@@ -79,9 +83,31 @@ class FtpServer(socketserver.BaseRequestHandler):
         return cmd_res
 
     def get_relative_path(self, abs_path):
-        print('get_relative_path')
+        '''
+        获取相对路径
+        :param abs_path:
+        :return:
+        '''
+        # print('get_relative_path')
         relative_path = abs_path.replace(settings.BASE_DIR, '')
         return relative_path
+
+    #TODO 对用户进行磁盘配额、不同用户配额可不同
+    def judge_home_size(self, file_size):
+        '''
+        判断上传文件是否超过目录额定大小
+        :return:
+        '''
+        config = configparser.ConfigParser()
+        config.read(settings.DB_DIR)
+
+        home_size_bak = config[self.username]['home_size']       #获取配置文件中用户定义的目录大小
+        dir_size = os.path.getsize(self.home_dir)                #当前家目录大小
+        print('dir_size', dir_size)
+
+        if (file_size + dir_size) < home_size_bak:               #判断是否超过磁盘最大限额
+            return True
+
 
     def server_ls(self, *args, **kwargs):
         '''
@@ -90,22 +116,33 @@ class FtpServer(socketserver.BaseRequestHandler):
         :param kwargs:
         :return:
         '''
-        print('from server_ls')
-
+        # print('from server_ls')
         #Windows下
         # res = self.run_cmd(r'dir %s' % self.current_dir)
 
         res = self.run_cmd(r'ls %s' % self.current_dir)
-        print('res', res)
+        # print('res', res)
         send_response(self.request, 200, data=res)
 
     def server_pwd(self, *args, **kwargs):
-        print('from server_pwd')
+        '''
+        查看当前服务器目录中的路径
+        :param args:
+        :param kwargs:
+        :return:
+        '''
+        # print('from server_pwd')
         res = self.get_relative_path(self.current_dir)
         send_response(self.request, 200, data=res)
 
     def server_cd(self, *args, **kwargs):
-        print('from server_cd')
+        '''
+        更改目录，与linux cd命令相同
+        :param args:
+        :param kwargs:
+        :return:
+        '''
+        # print('from server_cd')
 
         if args[0]:
             dest_path = "%s%s" % (self.current_dir, args[0]['path'])
@@ -129,23 +166,33 @@ class FtpServer(socketserver.BaseRequestHandler):
             send_response(self.request, 260, data=res)
 
     def server_put(self, *args, **kwargs):
-        print('from server_put')
+        '''
+        上传文件至服务器
+        :param args:
+        :param kwargs:
+        :return:
+        '''
+        # print('from server_put')
         # print('args',args)
         # print('kwargs', kwargs)
         data = args[0]
-        print('data', data)
+        # print('data', data)
         if data.get('filename') == None:
             send_response(self.request, 255)
 
         file_abs_path = '%s/%s' % (self.current_dir, data.get('filename'))
-        print('file_abs_path',file_abs_path)
+        # print('file_abs_path',file_abs_path)
         file_obj = open(file_abs_path, 'wb')
         file_base_name = data['filename']
         file_size = data['filesize']
-        print('file_size', file_size)
+        # TODO 增加判断是否超过磁盘最大容量
+        if not self.judge_home_size(file_size):
+            send_response(self.request, 262)
+            return
+        # print('file_size', file_size)
         send_response(self.request, 261)
 
-        if data.get('md5'):
+        if data.get('md5'):                     #判断是否需要MD5校验
             md5_obj = hashlib.md5()
             recive_size = 0
             while recive_size < file_size:
@@ -170,16 +217,22 @@ class FtpServer(socketserver.BaseRequestHandler):
                 print('文件%s接收完成' % file_base_name)
 
     def server_get(self, *args, **kwargs):
+        '''
+        从服务器下载文件
+        :param args:
+        :param kwargs:
+        :return:
+        '''
         # print('from server_get')
         # print('args',args)
         # print('kwargs', kwargs)
         data = args[0]
-        print('data', data)
+        # print('data', data)
         if data.get('filename') == None:
             send_response(self.request, 255)
 
         file_abs_path = '%s/%s'%(self.current_dir, data.get('filename'))
-        print(file_abs_path)
+        # print(file_abs_path)
 
         if os.path.isfile(file_abs_path):
             file_obj = open(file_abs_path,'rb')
