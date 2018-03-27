@@ -101,11 +101,13 @@ class FtpServer(socketserver.BaseRequestHandler):
         config = configparser.ConfigParser()
         config.read(settings.DB_DIR)
 
-        home_size_bak = config[self.username]['home_size']       #获取配置文件中用户定义的目录大小
+        print(self.username)
+        print('config', config[self.username])
+        home_size_bak = config[self.username]['homesize']       #获取配置文件中用户定义的目录大小
         dir_size = os.path.getsize(self.home_dir)                #当前家目录大小
         print('dir_size', dir_size)
 
-        if (file_size + dir_size) < home_size_bak:               #判断是否超过磁盘最大限额
+        if (file_size + dir_size) < int(home_size_bak):               #判断是否超过磁盘最大限额
             return True
 
 

@@ -20,4 +20,4 @@ def authenticate(username, passwd, conn):
         if passwd == passwd_bak:
             # print('通过验证====', username)
             config[username]['Username'] = username
-            return config[username]
+            return username
